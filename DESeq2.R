@@ -5,62 +5,60 @@ library(ggplot2)
 library(ggrepel)
 
 # read.table
-X930_data <- read.table("gene-count-matrix.txt", header = T, row.names = 1)
-names(X930_data)<- c("T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08","T09", "T10")
+X_data <- read.table("gene-count-matrix.txt", header = T, row.names = 1)
+names(X_data)<- c("T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09", "T10")
 
 
-# ¿ØÖÆÌõ¼þ£ºÒò×Ó£¨¶ÔÕÕ2£¬ÊµÑé2£©
-input_data <- X930_data[c("T01", "T02", "T03", "T04", "T05", "T06")]
+# æŽ§åˆ¶æ¡ä»¶ï¼šå› å­
+input_data <- X_data[c("T01", "T02", "T03", "T04", "T05", "T06")]
 condition <- factor(c(rep("WT", 3), rep("KO", 3)))
 
-input_data <- X930_data[c("T07", "T08","T09", "T10")]
-condition <- factor(c(rep("WT", 2), rep("KO", 2)))
-
-# È¡Õû,º¯Êýround
+# å–æ•´,å‡½æ•°round
 input_data <- input_data[which(rowSums(input_data) > 0), ]
 input_data <- round(input_data, digits = 0)
 
-# ×¼±¸ÎÄ¼þ
-# as.matrix ½«ÊäÈëÎÄ¼þ×ª»»Îª±í´ï¾ØÕó£»
+# å‡†å¤‡æ–‡ä»¶
+# as.matrix å°†è¾“å…¥æ–‡ä»¶è½¬æ¢ä¸ºè¡¨è¾¾çŸ©é˜µï¼›
 input_data <- as.matrix(input_data)
 
-# input_data¸ù¾Ý¿ØÖÆÌõ¼þ¹¹½¨data.frame
+# input_dataæ ¹æ®æŽ§åˆ¶æ¡ä»¶æž„å»ºdata.frame
 coldata <- data.frame(row.names = colnames(input_data), condition)
 head(coldata)
 
-# build deseq input matrix ¹¹½¨ÊäÈë¾ØÕó
-#countData×÷Îª¾ØÕóµÄinput_data£»colData Data.frame¸ñÊ½£»¿ØÖÆÌõ¼þdesign;
+# build deseq input matrix æž„å»ºè¾“å…¥çŸ©é˜µ
+# countDataä½œä¸ºçŸ©é˜µçš„input_dataï¼›colData Data.frameæ ¼å¼ï¼›æŽ§åˆ¶æ¡ä»¶design;
 dds <- DESeqDataSetFromMatrix(countData = input_data, colData = coldata, design = ~condition)
 dds$condition <- relevel(dds$condition, ref = "WT")
 
-# DESeq2 ½øÐÐ²îÒì·ÖÎö
+# DESeq2 è¿›è¡Œå·®å¼‚åˆ†æž
 dds <- DESeq(dds)
-#Êµ¼Ê°üº¬3²½
+# å®žé™…åŒ…å«3æ­¥
 
-# ÌáÈ¡½á¹û
-#dds dataset¸ñÊ½×ª»»ÎªDESeq2 ÖÐresultÊý¾Ý¸ñÊ½£¬½ÃÕýÖµÄ¬ÈÏ0.1
+# æå–ç»“æžœ
+# dds datasetæ ¼å¼è½¬æ¢ä¸ºDESeq2 ä¸­resultæ•°æ®æ ¼å¼ï¼ŒçŸ«æ­£å€¼é»˜è®¤0.1
 res <- results(dds, alpha = 0.05)
-#²é¿´res(DESeqresults¸ñÊ½),¿ÉÒÔ¿´µ½ÉÏÏÂµ÷»ùÒò
+# æŸ¥çœ‹res(DESeqresultsæ ¼å¼),å¯ä»¥çœ‹åˆ°ä¸Šä¸‹è°ƒåŸºå› 
 summary(res)
 
-#res(resultset)°´ÕÕPÖµÅÅÐò
+# res(resultset)æŒ‰ç…§På€¼æŽ’åº
 res <- res[order(res$padj), ]
 res
 
 table(res$padj < 0.05)
 
-# ½«½ø¹ý½ÃÕýºóµÄ±í´ïÁ¿½á¹û¼Ó½øÈ¥£»
+# å°†è¿›è¿‡çŸ«æ­£åŽçš„è¡¨è¾¾é‡ç»“æžœåŠ è¿›åŽ»ï¼›
 resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized = T)),
                  by = "row.names", sort = F)
 names(resdata)[1] <- "ID_Gene"
 
 resdata <- separate(resdata, ID_Gene, into = c("ID", "Gene"), sep = "_")
-#²é¿´(resdata)
+# æŸ¥çœ‹(resdata)
 head(resdata)
 
 ######
-#»­»ðÉ½Í¼
+# ç”»ç«å±±å›¾
 
+# æŒ‰ç…§padjåˆ†ç±»
 resdata$significant <- ifelse(resdata$padj < 0.05 & resdata$log2FoldChange > 1, "UP",
                               ifelse(resdata$padj < 0.05 & resdata$log2FoldChange < -1,
                                      "DOWN", "FALSE"))
@@ -78,7 +76,7 @@ ggplot(data = resdata, aes(x = log2FoldChange, y = -log10(padj), color = signifi
   geom_text_repel(data = subset(resdata, -log10(padj) > 5 & abs(log2FoldChange) > 1), 
                   aes(label = Gene), col = "black", alpha = 0.8)
 
-###
+# æŒ‰ç…§pvalueåˆ†ç±»
 resdata$significant <- ifelse(resdata$pvalue < 0.05 & resdata$log2FoldChange > 1, "UP",
                               ifelse(resdata$pvalue < 0.05 & resdata$log2FoldChange < -1,
                                      "DOWN", "FALSE"))
@@ -96,9 +94,6 @@ ggplot(data = resdata, aes(x = log2FoldChange, y = -log10(pvalue), color = signi
   geom_text_repel(data = subset(resdata, -log10(pvalue) > 10 & abs(log2FoldChange) > 1), 
                   aes(label = Gene), col = "black", alpha = 0.8)
 
-# output result Êä³ö½á¹û
-write.table(resdata, file = "X930.KO vs WT.diffexpr-results.txt", 
-            sep = "\t", quote = F, row.names = F)
-
-write.table(resdata, file = "X930.DC-KO vs Het.diffexpr-results.txt", 
+# output result è¾“å‡ºç»“æžœ
+write.table(resdata, file = "X.KO vs WT.diffexpr-results.txt", 
             sep = "\t", quote = F, row.names = F)
