@@ -19,4 +19,4 @@ Based on:
 `R` https://www.r-project.org/  
 `DESeq2`http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html 
 
-3. DEG analysis by DESeq2.R: from .gene.results file to DEG results  
+3. DEG analysis by DESeq2.R: from .gene.results file to DEG results (Volcano plot)  
