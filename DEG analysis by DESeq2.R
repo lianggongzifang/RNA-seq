@@ -9,11 +9,11 @@ X_data <- read.table("gene-count-matrix.txt", header = T, row.names = 1)
 names(X_data)<- c("T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09", "T10")
 
 
-# 控制条件：因子
+# 控制条件
 input_data <- X_data[c("T01", "T02", "T03", "T04", "T05", "T06")]
 condition <- factor(c(rep("WT", 3), rep("KO", 3)))
 
-# 取整,函数round
+# 取整
 input_data <- input_data[which(rowSums(input_data) > 0), ]
 input_data <- round(input_data, digits = 0)
 
@@ -52,7 +52,7 @@ resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized = T)),
 names(resdata)[1] <- "ID_Gene"
 
 resdata <- separate(resdata, ID_Gene, into = c("ID", "Gene"), sep = "_")
-# 查看(resdata)
+
 head(resdata)
 
 ######
@@ -97,3 +97,4 @@ ggplot(data = resdata, aes(x = log2FoldChange, y = -log10(pvalue), color = signi
 # output result 输出结果
 write.table(resdata, file = "X.KO vs WT.diffexpr-results.txt", 
             sep = "\t", quote = F, row.names = F)
+
