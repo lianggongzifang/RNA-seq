@@ -1,6 +1,7 @@
 # RNA-seq
 Based on:  
 `STAR` https://github.com/alexdobin/STAR  
+`samtools` https://www.htslib.org/  
 `rsem` http://deweylab.github.io/RSEM/  
 `RSeQC` http://rseqc.sourceforge.net/  
 
