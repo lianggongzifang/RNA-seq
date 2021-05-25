@@ -43,7 +43,7 @@ resdata <- separate(resdata, ID_Gene, into = c("ID", "Gene"), sep = "_")
 head(resdata)
 
 ######
-# Volcano Plot
+# Volcano plot
 
 # padj
 resdata$significant <- ifelse(resdata$padj < 0.05 & resdata$log2FoldChange > 1, "UP",
