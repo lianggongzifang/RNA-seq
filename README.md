@@ -1,6 +1,8 @@
 # RNA-seq
 Need: `STAR` https://github.com/alexdobin/STAR
+
       `rsem` http://deweylab.github.io/RSEM/
+      
       `RSeQC` http://rseqc.sourceforge.net/
 
 1. RNA-seq.sh: from .FASTQ to .bam and .gene.results (count/fpkm/tpm)
