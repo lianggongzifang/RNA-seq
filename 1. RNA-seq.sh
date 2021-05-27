@@ -10,6 +10,7 @@ STAR --runThreadN 4 --genomeDir ~/database/STAR/GENCODE_mm10/ \
 --sjdbGTFfile ~/database/genomes/GENCODE/gencode.vM24.annotation.gtf \
 --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --outFileNamePrefix ${name}.
 samtools index ${name}.Aligned.sortedByCoord.out.bam
+igvtools count -w 1 -e 0 ${name}.Aligned.sortedByCoord.out.bam ${name}.STAR.tdf mm10
 
 rsem-calculate-expression --paired-end --no-bam-output --append-names -p 4 --forward-prob 0.5 \
 -bam ${name}.Aligned.toTranscriptome.out.bam ~/database/RSEM/GENCODE_mm10/mouse_gencode ${name}.rsem
