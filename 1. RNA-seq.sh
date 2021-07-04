@@ -21,5 +21,8 @@ read_duplication.py -i ${name}.Aligned.sortedByCoord.out.bam -o ${name}
 junction_saturation.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed -i ${name}.Aligned.sortedByCoord.out.bam -o ${name}
 inner_distance.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed -i ${name}.Aligned.sortedByCoord.out.bam -o ${name}
 
+rm *._STARgenome
+rm *._STARpass1
+
 cd ..
 done
