@@ -7,17 +7,14 @@ library(ggrepel)
 # read.table
 X_data <- read.table("gene-count-matrix.txt", header = T, row.names = 1)
 names(X_data)<- c("T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09", "T10")
-
-# 
+ 
 input_data <- X_data[c("T01", "T02", "T03", "T04", "T05", "T06")]
 condition <- factor(c(rep("WT", 3), rep("KO", 3)))
 
-# 
 input_data <- input_data[which(rowSums(input_data) > 0), ]
 input_data <- round(input_data, digits = 0)
 input_data <- as.matrix(input_data)
 
-# 
 coldata <- data.frame(row.names = colnames(input_data), condition)
 head(coldata)
 
@@ -28,14 +25,12 @@ dds$condition <- relevel(dds$condition, ref = "WT")
 # DESeq2 
 dds <- DESeq(dds)
 
-# 
 res <- results(dds, alpha = 0.05)
 summary(res)
 res <- res[order(res$padj), ]
 res
 table(res$padj < 0.05)
 
-# 
 resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized = T)),
                  by = "row.names", sort = F)
 names(resdata)[1] <- "ID_Gene"
