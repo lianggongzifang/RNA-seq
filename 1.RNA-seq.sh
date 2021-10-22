@@ -1,11 +1,17 @@
 #!/bin/sh
-for name in T01 T02 T03 T04 T05 T06 T07 T08 T09 T10
+
+SEQUENCING_RUN="HU000"
+I7_INDEX="B41 B42 B43 B44 B45 B46 B47 B48"
+SAMPLE="YF000"
+SAMPLE_ALL="YF000"
+
+for name in ${SAMPLE}
 do
 mkdir ${name}
 cd ${name}
 
 STAR --runThreadN 4 --genomeDir ~/database/STAR/GENCODE_mm10/ \
---readFilesIn ~/rna-seq/${name}_1.fq ~/rna-seq/${name}_2.fq \
+--readFilesIn ~/rna-seq/${SEQUENCING_RUN}/${name}_1.fq.gz ~/rna-seq/${SEQUENCING_RUN}/${name}_2.fq.gz --readFilesCommand zcat \
 --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outFilterMultimapNmax 1 \
 --sjdbGTFfile ~/database/genomes/GENCODE/gencode.vM24.annotation.gtf \
 --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --outFileNamePrefix ${name}.
