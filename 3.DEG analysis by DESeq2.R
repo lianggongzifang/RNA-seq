@@ -1,3 +1,5 @@
+#!/home2/yuefeng/software/miniconda3/bin/Rscript
+
 library(DESeq2)
 library(tidyr)
 library(dplyr)
