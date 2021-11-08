@@ -1,3 +1,5 @@
+#!/bin/sh
+
 list_csv=""
 list_name="gene"
 for i in  ./*/*genes.results
