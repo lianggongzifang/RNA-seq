@@ -13,7 +13,7 @@ cd SMART
 cd multx
 for name in ${I7_INDEX}
 do
-fastq-multx -t 4 -m 0 -d 2 -x -b -B ~/${SEQUENCING_RUN}/${SEQUENCING_RUN}-${name}_index \
+fastq-multx -m 0 -d 2 -x -b -B ~/${SEQUENCING_RUN}/${SEQUENCING_RUN}-${name}_index \
 ~/${SEQUENCING_RUN}/I7-${name}_1.fq ~/${SEQUENCING_RUN}/I7-${name}_2.fq -o %_R1.fq %_R2.fq
 done
 cd ..
