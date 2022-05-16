@@ -15,7 +15,7 @@ do
 seqkit -j 8 subseq -r 20:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/FastMultx/${name}_R1.fq.gz
 seqkit -j 8 subseq -r 20:-1 -o ${name}_R2_MEcut.fq.gz ~/${SEQUENCING_RUN}/FastMultx/${name}_R2.fq.gz
 done
-fastqc .
+fastqc *.fq.gz
 cd ..
 
 ## STAR
