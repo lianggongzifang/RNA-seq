@@ -31,8 +31,8 @@ STAR --runThreadN 8 --genomeDir ~/database/STAR/GENCODE_mm10/ \
 samtools index ${name}.Aligned.sortedByCoord.out.bam
 igvtools count -w 1 -e 0 ${name}.Aligned.sortedByCoord.out.bam ${name}.STAR.tdf mm10
 done
-rm *._STARgenome
-rm *._STARpass1
+rm -r *._STARgenome
+rm -r *._STARpass1
 cd ..
 
 ## rsem count
