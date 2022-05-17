@@ -13,7 +13,7 @@ cd multx
 for name in ${I7_INDEX}
 do
 fastq-multx -m 0 -d 2 -x -b -B ~/${SEQUENCING_RUN}/${SEQUENCING_RUN}-${name}_index \
-~/${SEQUENCING_RUN}/I7-${name}_1.fq.gz ~/${SEQUENCING_RUN}/I7-${name}_2.fq.gz -o %_R1.fq %_R2.fq  \
+~/${SEQUENCING_RUN}/I7-${name}_1.fq.gz ~/${SEQUENCING_RUN}/I7-${name}_2.fq.gz -o %_R1.fq.gz %_R2.fq.gz  \
 > ${SEQUENCING_RUN}-${name}_multx.txt
 done
 cd ..
@@ -22,9 +22,9 @@ cd ..
 cd cut-index
 for name in ${SAMPLE}
 do
-#seqkit -j 8 subseq -r 26:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R1.fq
-seqkit -j 8 subseq -r 20:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R1.fq
-seqkit -j 8 subseq -r 20:-1 -o ${name}_R2_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R2.fq
+#seqkit -j 8 subseq -r 26:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R1.fq.gz
+seqkit -j 8 subseq -r 20:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R1.fq.gz
+seqkit -j 8 subseq -r 20:-1 -o ${name}_R2_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R2.fq.gz
 done
 fastqc *.fq.gz
 cd ..
