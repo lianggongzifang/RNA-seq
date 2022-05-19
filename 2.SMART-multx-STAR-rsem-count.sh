@@ -42,8 +42,7 @@ STAR --runThreadN 8 --genomeDir ~/database/STAR/GENCODE_mm10/ \
 samtools index ${name}.Aligned.sortedByCoord.out.bam
 igvtools count -w 1 -e 0 ${name}.Aligned.sortedByCoord.out.bam ${name}.STAR.tdf mm10
 done
-rm -r *._STARgenome
-rm -r *._STARpass1
+rm -r *._STARgenome *._STARpass1
 cd ..
 
 ## rsem count
@@ -119,4 +118,5 @@ echo $list_name > ./gene-fpkm-matrix.txt
 cp ~/software/rsem-fpkm-extract.py .
 python ./rsem-fpkm-extract.py ${list_csv} >> ./${SAMPLE}.gene-fpkm-matrix.txt
 
+rm ./multx/*.fq.gz
 echo "\n*** SMART-STAR-rsem-count.sh FINISH! ***\n"
