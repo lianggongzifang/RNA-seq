@@ -34,8 +34,8 @@ cd ..
 bash ~/software/zUMIs/zUMIs.sh -d ~/software/zUMIs/ -y ~/${SEQUENCING_RUN}/${SEQUENCING_RUN}.yaml
 
 ## multiqc
-rm -r *._STARgenome
-rm -r *._STARpass1
+rm -r *._STARgenome *._STARpass1
 multiqc .
 
+rm ./multx/*.fq.gz ./merge/*.fq.gz
 echo "\n*** SMART-zUMIs.sh FINISH! ***\n"
