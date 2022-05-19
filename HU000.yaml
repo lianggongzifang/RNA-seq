@@ -1,0 +1,48 @@
+project: HU000
+sequence_files:
+  file1:
+    name: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.index.fastq.gz
+    base_definition: BC(1-8)
+  file2:
+    name: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.R1.fastq.gz
+    base_definition: cDNA(30-150)
+  file3:
+    name: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.R2.fastq.gz
+    base_definition: cDNA(20-150)
+reference:
+  STAR_index: /home2/yuefeng/database/STAR/GENCODE_mm10_noGTF
+  GTF_file: /home2/yuefeng/database/genomes/GENCODE/gencode.vM24.annotation.gtf
+  additional_STAR_params: ''
+  additional_files: ~
+out_dir: /home2/yuefeng/HU000/ZUMIS
+num_threads: 8
+mem_limit: 20
+filter_cutoffs:
+  BC_filter:
+    num_bases: 1
+    phred: 20
+  UMI_filter:
+    num_bases: 1
+    phred: 20
+barcodes:
+  barcode_num: 4
+  barcode_file: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.expected_barcodes.txt
+  automatic: no
+  BarcodeBinning: 0
+  nReadsperCell: 100
+  demultiplex: yes
+counting_opts:
+  introns: yes
+  downsampling: '0'
+  strand: 0
+  Ham_Dist: 0
+  velocyto: no
+  primaryHit: yes
+  twoPass: yes
+make_stats: yes
+which_Stage: Filtering
+Rscript_exec: Rscript
+STAR_exec: STAR
+pigz_exec: pigz
+samtools_exec: samtools
+read_layout: PE
