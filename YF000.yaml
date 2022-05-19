@@ -1,4 +1,4 @@
-project: HU000
+project: YF000
 sequence_files:
   file1:
     name: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.index.fastq.gz
