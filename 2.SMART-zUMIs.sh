@@ -31,7 +31,7 @@ fastqc reads_for_zUMIs.R*.fastq.gz
 cd ..
 
 ## zUMIs
-bash ~/software/zUMIs/zUMIs.sh -d ~/software/zUMIs/ -y ~/${SEQUENCING_RUN}/${SEQUENCING_RUN}.yaml
+bash ~/software/zUMIs/zUMIs.sh -d ~/software/zUMIs/ -y ~/${SEQUENCING_RUN}/${SAMPLE_ALL}.yaml
 
 ## multiqc
 rm -r *._STARgenome *._STARpass1
