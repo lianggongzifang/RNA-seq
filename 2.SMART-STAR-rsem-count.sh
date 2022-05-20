@@ -4,27 +4,18 @@ SEQUENCING_RUN="HU000"
 I7_INDEX="B41 B42 B43 B44 B45 B46 B47 B48"
 SAMPLE="YF000a"
 SAMPLE_ALL="YF000"
+PREFIX="SMART"
 
-mkdir -p SMART/multx SMART/cut-index SMART/STAR SMART/rsem SMART/rseqc
-cd SMART
-
-## multx
-cd multx
-for name in ${I7_INDEX}
-do
-fastq-multx -m 0 -d 2 -x -b -B ~/${SEQUENCING_RUN}/${SEQUENCING_RUN}-${name}_index \
-~/${SEQUENCING_RUN}/I7-${name}_1.fq.gz ~/${SEQUENCING_RUN}/I7-${name}_2.fq.gz -o %_R1.fq.gz %_R2.fq.gz  \
-> ${SEQUENCING_RUN}-${name}_multx.txt
-done
-cd ..
+mkdir -p ${PREFIX}/multx ${PREFIX}/cut-index ${PREFIX}/STAR ${PREFIX}/rsem ${PREFIX}/rseqc
+cd ${PREFIX}
 
 ## cut ME and index
 cd cut-index
 for name in ${SAMPLE}
 do
-#seqkit -j 8 subseq -r 26:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R1.fq.gz
-seqkit -j 8 subseq -r 20:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R1.fq.gz
-seqkit -j 8 subseq -r 20:-1 -o ${name}_R2_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/multx/${name}_R2.fq.gz
+#seqkit -j 8 subseq -r 26:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/multx/${name}_R1.fq.gz
+seqkit -j 8 subseq -r 20:-1 -o ${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/multx/${name}_R1.fq.gz
+seqkit -j 8 subseq -r 20:-1 -o ${name}_R2_MEcut.fq.gz ~/${SEQUENCING_RUN}/multx/${name}_R2.fq.gz
 done
 fastqc *.fq.gz
 cd ..
@@ -34,7 +25,8 @@ cd STAR
 for name in ${SAMPLE}
 do
 STAR --runThreadN 8 --genomeDir ~/database/STAR/GENCODE_mm10/ \
---readFilesIn ~/${SEQUENCING_RUN}/SMART/cut-index/${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/SMART/cut-index/${name}_R2_MEcut.fq.gz --readFilesCommand zcat \
+--readFilesIn ~/${SEQUENCING_RUN}/${PREFIX}/cut-index/${name}_R1_MEcut.fq.gz ~/${SEQUENCING_RUN}/${PREFIX}/cut-index/${name}_R2_MEcut.fq.gz \
+--readFilesCommand zcat \
 --sjdbGTFfile ~/database/genomes/GENCODE/gencode.vM24.annotation.gtf \
 --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic \
 --outSAMtype BAM SortedByCoordinate --outSAMattributes All --outFilterMultimapNmax 1 \
@@ -50,7 +42,7 @@ cd rsem
 for name in ${SAMPLE}
 do
 rsem-calculate-expression --paired-end --no-bam-output --append-names -p 8 --forward-prob 0.5 \
--bam ~/${SEQUENCING_RUN}/SMART/STAR/${name}.Aligned.toTranscriptome.out.bam \
+-bam ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.toTranscriptome.out.bam \
 ~/database/RSEM/GENCODE_mm10/mouse_gencode ${name}.rsem
 done
 cd ..
@@ -59,15 +51,15 @@ cd ..
 cd rseqc
 for name in ${SAMPLE}
 do
-read_duplication.py -i ~/${SEQUENCING_RUN}/SMART/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+read_duplication.py -i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
 read_distribution.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/SMART/STAR/${name}.Aligned.sortedByCoord.out.bam > ${name}.readDistribution.txt
+-i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam > ${name}.readDistribution.txt
 geneBody_coverage.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/SMART/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+-i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
 junction_saturation.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/SMART/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+-i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
 inner_distance.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/SMART/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+-i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
 done
 cd ..
 
@@ -118,5 +110,4 @@ echo $list_name > ./gene-fpkm-matrix.txt
 cp ~/software/rsem-fpkm-extract.py .
 python ./rsem-fpkm-extract.py ${list_csv} >> ./${SAMPLE}.gene-fpkm-matrix.txt
 
-rm ./multx/*.fq.gz
 echo "\n*** SMART-STAR-rsem-count.sh FINISH! ***\n"
