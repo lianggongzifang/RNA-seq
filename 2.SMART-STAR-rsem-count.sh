@@ -6,7 +6,7 @@ SAMPLE="YF000a"
 SAMPLE_ALL="YF000"
 PREFIX="SMART"
 
-mkdir -p ${PREFIX}/multx ${PREFIX}/cut-index ${PREFIX}/STAR ${PREFIX}/rsem ${PREFIX}/rseqc
+mkdir -p ${PREFIX}/cut-index ${PREFIX}/STAR ${PREFIX}/rsem ${PREFIX}/rseqc
 cd ${PREFIX}
 
 ## cut ME and index
