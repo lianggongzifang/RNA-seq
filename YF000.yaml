@@ -1,13 +1,13 @@
-project: YF000
+project: ${SAMPLE_ALL}
 sequence_files:
   file1:
-    name: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.index.fastq.gz
+    name: /home2/yuefeng/${SEQUENCING_RUN}/${PREFIX}/merge/reads_for_zUMIs.index.fastq.gz
     base_definition: BC(1-8)
   file2:
-    name: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.R1.fastq.gz
+    name: /home2/yuefeng/${SEQUENCING_RUN}/${PREFIX}/merge/reads_for_zUMIs.R1.fastq.gz
     base_definition: cDNA(30-150)
   file3:
-    name: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.R2.fastq.gz
+    name: /home2/yuefeng/${SEQUENCING_RUN}/${PREFIX}/merge/reads_for_zUMIs.R2.fastq.gz
     base_definition: cDNA(20-150)
 reference:
   STAR_index: /home2/yuefeng/database/STAR/GENCODE_mm10_noGTF
@@ -26,7 +26,7 @@ filter_cutoffs:
     phred: 20
 barcodes:
   barcode_num: 4
-  barcode_file: /home2/yuefeng/HU000/ZUMIS/merge/reads_for_zUMIs.expected_barcodes.txt
+  barcode_file: /home2/yuefeng/${SEQUENCING_RUN}/${PREFIX}/merge/reads_for_zUMIs.expected_barcodes.txt
   automatic: no
   BarcodeBinning: 0
   nReadsperCell: 100
