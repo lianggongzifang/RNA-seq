@@ -7,12 +7,11 @@ Based on:
 `rsem` http://deweylab.github.io/RSEM/  
 `RSeQC` http://rseqc.sourceforge.net/  
 `igvtools` http://software.broadinstitute.org/software/igv/igvtools/  
+`FastQC` https://www.bioinformatics.babraham.ac.uk/projects/fastqc/  
+`MultiQC` https://multiqc.info/  
+`zUMIs` https://github.com/sdparekh/zUMIs/  
+`SeqKit` https://bioinf.shenwei.me/seqkit/  
 
-  
-![image](https://github.com/lianggongzifang/RNA-seq/blob/main/RNA-seq.jpg)  
-  
-Reference：https://github.com/lianggongzifang/RNA-seq/blob/main/Djebali2017_Protocol_BioinformaticsPipelineForTrans.pdf  
-  
 ## From gene expression level to differential expression gene analysis
 Based on:  
 `R` https://www.r-project.org/  
