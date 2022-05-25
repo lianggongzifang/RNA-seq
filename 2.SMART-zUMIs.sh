@@ -6,7 +6,7 @@ SAMPLE="YF000a"
 SAMPLE_ALL="YF000"
 PREFIX="ZUMIS"
 
-mkdir -p ${PREFIX}/merge
+mkdir -p ${PREFIX}/merge ${PREFIX}/rseqc
 cd ${PREFIX}
 
 ## merge reads
@@ -24,7 +24,7 @@ cd ..
 ## zUMIs
 bash ~/software/zUMIs/zUMIs.sh -d ~/software/zUMIs/ -y ~/${SEQUENCING_RUN}/${SAMPLE_ALL}.yaml
 
-## rseqc
+## demultiplexed.tdf
 BC=$(cat merge/reads_for_zUMIs.expected_barcodes.txt | tr '\n' ' ')
 cd zUMIs_output/demultiplexed
 for name in ${BC}
@@ -32,19 +32,20 @@ do
 samtools index ${SAMPLE_ALL}.${name}.demx.bam
 igvtools count -w 1 -e 0 ${SAMPLE_ALL}.${name}.demx.bam ${SAMPLE_ALL}.${name}.demx.tdf mm10
 done
-for name in ${BC}
-do
-read_duplication.py -i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
-read_distribution.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ${SAMPLE_ALL}.${name}.demx.bam > ${SAMPLE_ALL}.${name}.readDistribution.txt
-geneBody_coverage.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
-junction_saturation.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
-inner_distance.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
-done
 cd ..
+cd ..
+
+## rseqc
+cd rseqc
+read_duplication.py -i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
+read_distribution.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam > ${SAMPLE_ALL}.readDistribution.txt
+geneBody_coverage.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
+junction_saturation.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
+inner_distance.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
 cd ..
 
 ## multiqc
