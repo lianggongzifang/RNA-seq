@@ -6,7 +6,7 @@ SAMPLE="YF000a"
 SAMPLE_ALL="YF000"
 PREFIX="ZUMIS"
 
-mkdir -p ${PREFIX}/merge ${PREFIX}/rseqc
+mkdir -p ${PREFIX}/merge
 cd ${PREFIX}
 
 ## merge reads
@@ -33,19 +33,6 @@ samtools index ${SAMPLE_ALL}.${name}.demx.bam
 igvtools count -w 1 -e 0 ${SAMPLE_ALL}.${name}.demx.bam ${SAMPLE_ALL}.${name}.demx.tdf mm10
 done
 cd ..
-cd ..
-
-## rseqc
-cd rseqc
-read_duplication.py -i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
-read_distribution.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam > ${SAMPLE_ALL}.readDistribution.txt
-geneBody_coverage.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
-junction_saturation.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
-inner_distance.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
--i ~/${SEQUENCING_RUN}/${PREFIX}/${SAMPLE_ALL}.filtered.Aligned.GeneTagged.sorted.bam -o ${SAMPLE_ALL}
 cd ..
 
 ## multiqc
