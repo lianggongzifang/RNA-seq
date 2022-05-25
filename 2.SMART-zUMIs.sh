@@ -24,6 +24,29 @@ cd ..
 ## zUMIs
 bash ~/software/zUMIs/zUMIs.sh -d ~/software/zUMIs/ -y ~/${SEQUENCING_RUN}/${SAMPLE_ALL}.yaml
 
+## rseqc
+BC=$(cat merge/reads_for_zUMIs.expected_barcodes.txt | tr '\n' ' ')
+cd zUMIs_output/demultiplexed
+for name in ${BC}
+do
+samtools index ${SAMPLE_ALL}.${name}.demx.bam
+igvtools count -w 1 -e 0 ${SAMPLE_ALL}.${name}.demx.bam ${SAMPLE_ALL}.${name}.demx.tdf mm10
+done
+for name in ${BC}
+do
+read_duplication.py -i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
+read_distribution.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ${SAMPLE_ALL}.${name}.demx.bam > ${SAMPLE_ALL}.${name}.readDistribution.txt
+geneBody_coverage.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
+junction_saturation.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
+inner_distance.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}
+done
+cd ..
+cd ..
+
 ## multiqc
 rm -r *._STARgenome *._STARpass1
 multiqc .
