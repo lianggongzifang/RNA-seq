@@ -52,6 +52,11 @@ cd rseqc
 for name in ${SAMPLE}
 do
 read_duplication.py -i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+insertion_profile.py -s "PE" -i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+deletion_profile.py -l 131 -i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+mismatch_profile.py -l 131 -i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
+junction_annotation.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam -o ${name}
 read_distribution.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
 -i ~/${SEQUENCING_RUN}/${PREFIX}/STAR/${name}.Aligned.sortedByCoord.out.bam > ${name}.readDistribution.txt
 geneBody_coverage.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
