@@ -31,6 +31,11 @@ for name in ${BC}
 do
 samtools index ${SAMPLE_ALL}.${name}.demx.bam
 igvtools count -w 1 -e 0 ${SAMPLE_ALL}.${name}.demx.bam ${SAMPLE_ALL}.${name}.demx.tdf mm10
+read_duplication.py -i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}.demx
+insertion_profile.py -s "PE" -i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}.demx
+deletion_profile.py -l 131 -i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}.demx
+inner_distance.py -r ~/database/genomes/GENCODE/mm10_Gencode_VM18.bed \
+-i ${SAMPLE_ALL}.${name}.demx.bam -o ${SAMPLE_ALL}.${name}.demx
 done
 cd ..
 cd ..
